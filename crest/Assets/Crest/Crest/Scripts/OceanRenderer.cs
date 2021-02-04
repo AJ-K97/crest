@@ -174,7 +174,7 @@ namespace Crest
         [Tooltip("Simulation of foam created in choppy water and dissipating over time."), SerializeField]
         bool _createFoamSim = true;
         public bool CreateFoamSim { get { return _createFoamSim; } }
-        [EmbeddedField]
+        [PredicatedField("_createFoamSim", order = 0), EmbeddedField(order = 1)]
         public SimSettingsFoam _simSettingsFoam;
 
         [Tooltip("Dynamic waves generated from interactions with objects such as boats."), SerializeField]
@@ -186,7 +186,7 @@ namespace Crest
         [Tooltip("Horizontal motion of water body, akin to water currents."), SerializeField]
         bool _createFlowSim = false;
         public bool CreateFlowSim { get { return _createFlowSim; } }
-        [EmbeddedField]
+        [PredicatedField("_createFlowSim", order = 0), EmbeddedField(order = 1)]
         public SimSettingsFlow _simSettingsFlow;
 
         [Tooltip("Shadow information used for lighting water."), SerializeField]

@@ -12,7 +12,7 @@ using UnityEditor;
 namespace Crest
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class PredicatedFieldAttribute : PropertyAttribute
+    public class PredicatedFieldAttribute : MultiPropertyAttribute
     {
         public readonly string _propertyName;
         public readonly bool _inverted;
@@ -67,33 +67,15 @@ namespace Crest
 
             return _inverted ? !result : result;
         }
-#endif
-    }
 
-#if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(PredicatedFieldAttribute))]
-    public class PredicatedFieldAttributePropertyDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label, MultiPropertyDrawer drawer)
         {
-            var attrib = (attribute as PredicatedFieldAttribute);
-            var propName = attrib._propertyName;
-            var prop = property.serializedObject.FindProperty(propName);
-
-            var before = GUI.enabled;
+            var prop = property.serializedObject.FindProperty(_propertyName);
             if (prop != null)
             {
-                GUI.enabled = attrib.GUIEnabled(prop);
+                GUI.enabled = GUIEnabled(prop);
             }
-            else
-            {
-                Debug.LogError($"PredicatedFieldAttributePropertyDrawer - field '{propName}' not found.");
-            }
-
-            EditorGUI.PropertyField(position, property, label);
-
-            GUI.enabled = before;
         }
-    }
 #endif
+    }
 }
